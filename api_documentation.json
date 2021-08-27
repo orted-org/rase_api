@@ -1,0 +1,37 @@
+{
+    "/auth": {
+        "/login (POST)": {
+            "body": {
+                "idToken": "Id Token obtained after login using firebase"
+            },
+            "res": {
+                "status": 200,
+                "content": "user details including if he/she is active or wait listed"
+            },
+            "error": {
+                "400": "No Id Token Found in request",
+                "401": "Id token expired",
+                "422": "Email not verified",
+                "500": "Internal Server Error"
+            }
+        },
+        "/login (GET)": {
+            "res": {
+                "status": 200,
+                "content": "user details"
+            },
+            "error": {
+                "401": "No session found or session expired or the user is wait listed"
+            }
+        },
+        "/logout (DELETE)": {
+            "res": {
+                "status": 200,
+                "message": "logged out"
+            },
+            "error": {
+                "401": "Unauthorized"
+            }
+        }
+    }
+}
