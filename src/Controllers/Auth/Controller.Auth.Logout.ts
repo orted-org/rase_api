@@ -1,7 +1,7 @@
 import { makeError } from "../../Helpers/ErrorHandling/Helper.EH.MakeError";
 import RouteHandler from "../RouteHandlerType";
 import { UserDAO } from "../../DAO/DAO.User";
-import { performLogout } from "../../Services/Services.Auth";
+import { performLogout } from "../../Services/Auth/Services.Auth";
 
 const userDao = new UserDAO();
 const Logout: RouteHandler = (req, res, next) => {

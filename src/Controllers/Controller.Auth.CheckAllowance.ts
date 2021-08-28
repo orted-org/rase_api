@@ -1,7 +1,7 @@
 import { makeError } from "../Helpers/ErrorHandling/Helper.EH.MakeError";
 import RouteHandler from "./RouteHandlerType";
 import { UserDAO } from "../DAO/DAO.User";
-import { checkIfAlreadyLogin } from "../Services/Services.Auth";
+import { checkIfAlreadyLogin } from "../Services/Auth/Services.Auth";
 const userDao = new UserDAO();
 
 const checkAllowance: RouteHandler = (req, res, next) => {
