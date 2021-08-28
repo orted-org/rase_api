@@ -1,5 +1,6 @@
 import { OAuth2Client } from "google-auth-library";
 import { OAuthPayload } from "../../Interfaces/Interfaces.Auth";
+import ENV from "../Config/env";
 import { makeError } from "../ErrorHandling/Helper.EH.MakeError";
 // this function checks the integrity of the googleIdToken and outputs the user data
 function verifyGoogleIdTokenAndGetUserData(googleIdToken : string) : Promise<OAuthPayload> {
@@ -8,7 +9,7 @@ function verifyGoogleIdTokenAndGetUserData(googleIdToken : string) : Promise<OAu
     return client
       .verifyIdToken({
         idToken: googleIdToken,
-        audience: process.env.GOOGLE_CLIENT_ID,
+        audience: ENV.auth.googleClientId
       })
       .then((ticket) => {
         // the integrity of the google id token has been confirmed and obtained data in payload

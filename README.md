@@ -38,6 +38,8 @@ Get the firebase admin configuration file from firebase and name it to `firebase
 
 `POSTGRES_PORT = postgres-port`
 
+`GOOGLE_CLIENT_ID = client-id` 
+
 
 ### Start the server
 
