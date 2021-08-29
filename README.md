@@ -1,55 +1,24 @@
-# GOOD WEALTH BETA SERVER
-
+# RASE NodeJS Server
 
 ## Run Locally
 
-Must have postgres running with the following config:
+Must have docker installed and running on the system for the following instructions:
 
-`POSTGRES_USER = some-user`
 
-`POSTGRES_PASSWORD = some-password`
-
-`POSTGRES_DB = some-db`
-
-Please ensure that the DB has the schema as mentioned in `schema.sql`
-
-### Go to the project directory and install packages
+#### Change file permission (if not already changed)
 
 ```bash
-  yarn
+  sudo chmod 0755 ./dev
 ```
-or
+
+#### Run all the containers
 
 ```bash
-  npm install --production=false
+  ./dev run
 ```
-### Get the firebase admin private key for auth
-Get the firebase admin configuration file from firebase and name it to `firebaseAuthCredentials.json`. This file must be in the same level of the package.json file.
 
-
-### Env variables 
-`POSTGRES_USER = some-user`
-
-`POSTGRES_PASSWORD = some-password`
-
-`POSTGRES_DB = some-db`
-
-`POSTGRES_HOST = postgres-host`
-
-`POSTGRES_PORT = postgres-port`
-
-`GOOGLE_CLIENT_ID = client-id` 
-
-
-### Start the server
+#### To Reset The Containers
 
 ```bash
-  yarn run dev
+  ./dev reset
 ```
-or
-```bash
-  npm run dev
-```
-
-
-  
