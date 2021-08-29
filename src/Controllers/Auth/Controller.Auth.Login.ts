@@ -10,8 +10,10 @@ import { makeError } from "../../Helpers/ErrorHandling/Helper.EH.MakeError";
 import {
   checkIfAlreadyLogin,
   performLogin,
-} from "../../Services/Services.Auth";
+} from "../../Services/Auth/Services.Auth";
 import { UserDAO } from "../../DAO/DAO.User";
+import { verifyGoogleIdTokenAndGetUserData } from "../../Helpers/Auth/Helper.Auth.GoogleAuthLib";
+import { ValidateUser } from "../../Services/Auth/Service.Auth.ValidateUser";
 const userDao = new UserDAO();
 
 // controller to perform login when received ID token from OAuth
@@ -34,17 +36,11 @@ const LoginPost: RouteHandler = (req, res, next) => {
 
       try {
         //getting data from OAuth
-        // const dataFromOAuth = await getUserDataFromAuth(idToken);
+        const tempData : OAuthPayload = await verifyGoogleIdTokenAndGetUserData(idToken);
 
-        // got the data from OAuth of the user whose OAuth contains email and is verified
+        //validating user
+        await ValidateUser(tempData);
 
-        const tempData: OAuthPayload = {
-          fullName: "Himanshu Sah",
-          subId: "something",
-          email: "someemail",
-          profilePicture: "url",
-          role: "student",
-        };
 
         try {
           // Performing Login of the user and getting userData and session

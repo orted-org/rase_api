@@ -5,6 +5,5 @@ interface OAuthPayload {
   email: string;
   profilePicture: string;
   subId: string;
-  role: UserRoleType;
 }
 export type { OAuthPayload };

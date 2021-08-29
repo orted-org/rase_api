@@ -1,3 +1,4 @@
+import { UserRoleType, UserIdType, SubIdType } from "../Types/Types.Global";
 interface IUser {
   userId: UserIdType;
   subId: SubIdType;

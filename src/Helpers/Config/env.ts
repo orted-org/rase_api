@@ -22,6 +22,7 @@ const ENV = {
   },
   auth: {
     sessionSecret: getEnv("SESSION_SECRET")?.getString() || "sessionSecret",
+    googleClientId : getEnv("GOOGLE_CLIENT_ID")?.getString()
   },
   connectivity: {
     redisPort: getEnv("REDIS_PORT")?.getNumber() || 6379,

@@ -1,13 +1,17 @@
-import { makeError } from "../Helpers/ErrorHandling/Helper.EH.MakeError";
-import { inMemDel, inMemGet, inMemSet } from "../Helpers/InMemDB/Helper.IMD";
-import { OAuthPayload } from "../Interfaces/Interfaces.Auth";
+import { professors } from "../../prof_year.json"
+import { makeError } from "../../Helpers/ErrorHandling/Helper.EH.MakeError";
+import { inMemDel, inMemGet, inMemSet } from "../../Helpers/InMemDB/Helper.IMD";
+import { OAuthPayload } from "../../Interfaces/Interfaces.Auth";
 import {
   generateNewUserID,
   generateSessionID,
-} from "../Helpers/Auth/Helper.Auth.Factory";
-import { SESSION_DURATION } from "../Helpers/Auth/Helper.Auth.DurationHandler";
-import { UserDAO } from "../DAO/DAO.User";
-import { IUser } from "../Interfaces/Interface.User";
+} from "../../Helpers/Auth/Helper.Auth.Factory";
+import { SESSION_DURATION } from "../../Helpers/Auth/Helper.Auth.DurationHandler";
+import { UserDAO } from "../../DAO/DAO.User";
+import { IUser } from "../../Interfaces/Interface.User";
+import { UserRoleType } from "../../Types/Types.Global";
+
+
 
 interface UserDataWithSession {
   userData: IUser;
@@ -73,7 +77,7 @@ function createNewUser(dataFromOAuth: OAuthPayload, userDao: UserDAO) {
       email: dataFromOAuth.email,
       profilePicture: dataFromOAuth.profilePicture,
       subId: dataFromOAuth.subId,
-      role: dataFromOAuth.role,
+      role: gettingRoleOfUser(dataFromOAuth),
     };
 
     //storing the user in db
@@ -87,6 +91,15 @@ function createNewUser(dataFromOAuth: OAuthPayload, userDao: UserDAO) {
       });
   });
 }
+
+//logic to get the role of user
+function gettingRoleOfUser(dataFromOAuth : OAuthPayload):UserRoleType {
+  if(professors.includes(dataFromOAuth.email)){
+    return "teacher"; 
+  }
+  else return "student";
+}
+
 function checkIfAlreadyLogin(incomingSession: string, userDao: UserDAO) {
   return new Promise<IUser>(async (resolve, reject) => {
     inMemGet(incomingSession).then((data) => {

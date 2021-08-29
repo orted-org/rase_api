@@ -1,3 +1,11 @@
+export const USER_ROLE_TYPE = {
+  name: "user_role_type",
+  enum :{
+    student : "student",
+    teacher : "teacher"
+  }
+}
+
 export const USER_TABLE = {
   name: "users",
   attr: {
