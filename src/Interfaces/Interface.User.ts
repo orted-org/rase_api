@@ -1,6 +1,6 @@
-import { UserRoleType, UserIdType, SubIdType } from "../Types/Types.Global";
+import { UserRoleType, UUIDType, SubIdType } from "../Types/Types.Global";
 interface IUser {
-  userId: UserIdType;
+  userId: UUIDType;
   subId: SubIdType;
   fullName: string;
   profilePicture: string;
