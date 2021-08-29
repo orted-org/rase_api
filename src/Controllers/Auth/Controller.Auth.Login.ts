@@ -36,11 +36,12 @@ const LoginPost: RouteHandler = (req, res, next) => {
 
       try {
         //getting data from OAuth
-        const tempData : OAuthPayload = await verifyGoogleIdTokenAndGetUserData(idToken);
+        const tempData: OAuthPayload = await verifyGoogleIdTokenAndGetUserData(
+          idToken
+        );
 
         //validating user
         await ValidateUser(tempData);
-
 
         try {
           // Performing Login of the user and getting userData and session
@@ -57,8 +58,6 @@ const LoginPost: RouteHandler = (req, res, next) => {
           throw err;
         }
       } catch (err) {
-        console.log(err);
-
         next(err);
       }
     });
