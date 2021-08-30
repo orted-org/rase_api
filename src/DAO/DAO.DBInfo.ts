@@ -1,10 +1,10 @@
 export const USER_ROLE_TYPE = {
   name: "user_role_type",
-  enum :{
-    student : "student",
-    teacher : "teacher"
-  }
-}
+  enum: {
+    student: "student",
+    teacher: "teacher",
+  },
+};
 
 export const USER_TABLE = {
   name: "users",
@@ -19,20 +19,19 @@ export const USER_TABLE = {
 };
 
 export const TEAM_TABLE = {
-  name : "teams",
-  attr : {
-    teamId : "team_id",
-    teamName : "team_name",
-    description : "description",
-    creatorId : "creator_id"
-  }
-}
+  name: "teams",
+  attr: {
+    teamId: "team_id",
+    teamName: "team_name",
+    description: "description",
+    creatorId: "creator_id",
+  },
+};
 
-export  const USER_TEAMS_TABLE = {
-  name : "user_teams",
-  attr : {
-    userId : "user_id",
-    teamId : "team_id"
-  }
-}
-
+export const USER_TEAMS_TABLE = {
+  name: "user_teams",
+  attr: {
+    userId: "user_id",
+    teamId: "team_id",
+  },
+};
