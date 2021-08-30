@@ -36,7 +36,9 @@ function getRegistrationId(str: string): number {
   const num = str.match(/\d+/g);
   if (num) {
     for (let i = 0; i < num.length; i++) {
-      if (Number(num[i]) < regId) regId = Number(num[i]);
+      console.log(Number(num[i]));
+      
+      if (Number(num[i]) > regId) regId = Number(num[i]);
     }
   }
   return regId;
