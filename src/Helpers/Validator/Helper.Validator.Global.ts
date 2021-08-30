@@ -1,31 +1,39 @@
+const UnitValidator = {
+  ValidateUndefined: validateUndefined,
+  ValidateZeroLength: validateIsNotZeroLength,
+  ValidateIsNumber: validateIsNumber,
+  ValidateIsNotNull: validateIsNotNull,
+  ValidateIsNotNaN: validateIsNotNaN,
+};
 function validateUndefined(item: any): boolean {
   return item !== undefined;
 }
-function validateZeroLength(item: string | any[]) {
+function validateIsNotZeroLength(item: any): boolean {
   return item.length !== 0;
 }
 function validateIsNumber(item: any): boolean {
   return !isNaN(parseInt(item));
 }
-function validateIsNull(item: any): boolean {
+function validateIsNotNull(item: any): boolean {
   return item !== null;
 }
 function validateIsNotNaN(item: any): boolean {
   return !isNaN(item);
 }
-function validationPipeline(validators: ((item: any) => boolean)[], item: any) {
-  for (let i = 0; i < validators.length; i++) {
-    if (!validators[i](item)) {
-      return false;
+function ValidationPipeline(
+  validators: ((item: any) => boolean)[],
+  item: any,
+  label: string
+) {
+  return new Promise((resolve, reject) => {
+    for (let i = 0; i < validators.length; i++) {
+      if (!validators[i](item)) {
+        return reject({
+          message: "invalid " + label,
+        });
+      }
     }
-  }
-  return true;
+    return resolve(null);
+  });
 }
-export {
-  validateUndefined,
-  validateZeroLength,
-  validateIsNumber,
-  validateIsNull,
-  validationPipeline,
-  validateIsNotNaN,
-};
+export { ValidationPipeline, UnitValidator };
