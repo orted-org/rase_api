@@ -47,12 +47,19 @@ const LoginPost: RouteHandler = (req, res, next) => {
           // Performing Login of the user and getting userData and session
           const data = await performLogin(tempData, userDao);
 
-          // if not wait listed sending the session
-          const session = data.session;
-          sendSession(res, session);
+          const sessionMao = new SessionMAO();
+          sessionMao
+            .SetSession(data.sessionId, data.session)
+            .then(() => {
+              sendSession(res, data.sessionId);
+            })
+            .catch((err) => {
+              next(err);
+              return;
+            });
 
           // sending the response
-          res.status(200).json(data.userData);
+          res.status(200).json(data.session);
         } catch (err) {
           //this will be internal server error
           throw err;

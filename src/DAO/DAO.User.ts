@@ -2,12 +2,14 @@ import DBError from "../Helpers/ErrorHandling/Helper.EH.DBError";
 import { makeError } from "../Helpers/ErrorHandling/Helper.EH.MakeError";
 import { client } from "../Helpers/Helper.DBInit";
 import { IUser } from "../Interfaces/Interface.User";
+import { ISession } from "../Interfaces/Interfaces.Auth";
 import { SubIdType } from "../Types/Types.Global";
-import { USER_TABLE } from "./DAO.DBInfo";
+import { USER_TABLE, USER_TEAMS_TABLE } from "./DAO.DBInfo";
 interface ICreateUserParams extends IUser {}
 interface IUserDAO {
   CreateUser: (userData: ICreateUserParams) => Promise<IUser>;
   GetUserBySubId: (subId: SubIdType) => Promise<IUser | null>;
+  GetUserWithTeamIdBySubId: (subId: SubIdType) => Promise<ISession | null>;
 }
 const _createUser = `
                     INSERT INTO ${USER_TABLE.name}
@@ -40,6 +42,21 @@ const _getUserBySubId = `
                         WHERE 
                             ${USER_TABLE.attr.subId} = $1
                         `;
+const _getUserWithTeamIdBySubId = `
+                                  SELECT 
+                                      ${USER_TABLE.name}.${USER_TABLE.attr.userId},
+                                      ${USER_TABLE.attr.subId},
+                                      ${USER_TABLE.attr.fullName},
+                                      ${USER_TABLE.attr.email},
+                                      ${USER_TABLE.attr.profilePicture},
+                                      ${USER_TABLE.attr.role}
+                                      ${USER_TEAMS_TABLE.attr.teamId}
+                                  FROM ${USER_TABLE.name}
+                                  LEFT JOIN ${USER_TEAMS_TABLE.name}
+                                  USING ${USER_TEAMS_TABLE.attr.userId} 
+                                  WHERE 
+                                      ${USER_TABLE.attr.subId} = $1
+                                  `;
 class UserDAO implements IUserDAO {
   CreateUser(userData: ICreateUserParams) {
     return new Promise<IUser>((resolve, reject) => {
@@ -86,6 +103,29 @@ class UserDAO implements IUserDAO {
             email: data.rows[0][USER_TABLE.attr.email],
             profilePicture: data.rows[0][USER_TABLE.attr.profilePicture],
             role: data.rows[0][USER_TABLE.attr.role],
+          });
+        })
+        .catch((err) => {
+          return reject(DBError(err));
+        });
+    });
+  }
+  GetUserWithTeamIdBySubId(subId: SubIdType) {
+    return new Promise<ISession | null>((resolve, reject) => {
+      client
+        .query(_getUserBySubId, [subId])
+        .then((data) => {
+          if (data.rows.length === 0) {
+            return resolve(null);
+          }
+          return resolve({
+            userId: data.rows[0][USER_TABLE.attr.userId],
+            subId: data.rows[0][USER_TABLE.attr.subId],
+            fullName: data.rows[0][USER_TABLE.attr.fullName],
+            email: data.rows[0][USER_TABLE.attr.email],
+            profilePicture: data.rows[0][USER_TABLE.attr.profilePicture],
+            role: data.rows[0][USER_TABLE.attr.role],
+            teamId: data.rows[0][USER_TEAMS_TABLE.attr.teamId],
           });
         })
         .catch((err) => {
