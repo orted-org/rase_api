@@ -2,17 +2,17 @@
     "/auth": {
         "/login (POST)": {
             "body": {
-                "idToken": "Id Token obtained after login using firebase"
+                "idToken": "obtained id token from the google OAuth"
             },
             "res": {
                 "status": 200,
-                "content": "user details including if he/she is active or wait listed"
+                "content": "user details"
             },
             "error": {
-                "400": "No Id Token Found in request",
-                "401": "Id token expired",
-                "422": "Email not verified",
-                "500": "Internal Server Error"
+                "400": "no Id Token Found in request",
+                "401": "id token expired",
+                "422": "email not allowed",
+                "500": "internal server error"
             }
         },
         "/login (GET)": {
