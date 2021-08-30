@@ -17,3 +17,22 @@ export const USER_TABLE = {
     role: "role",
   },
 };
+
+export const TEAM_TABLE = {
+  name : "teams",
+  attr : {
+    teamId : "team_id",
+    teamName : "team_name",
+    description : "description",
+    creatorId : "creator_id"
+  }
+}
+
+export  const USER_TEAMS_TABLE = {
+  name : "user_teams",
+  attr : {
+    userId : "user_id",
+    teamId : "team_id"
+  }
+}
+

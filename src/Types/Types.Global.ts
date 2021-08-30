@@ -1,4 +1,4 @@
-type UserIdType = string;
+type UUIDType = string;
 type SubIdType = string;
 type UserRoleType = "student" | "teacher";
-export { UserIdType, SubIdType, UserRoleType };
+export { UUIDType, SubIdType, UserRoleType };
