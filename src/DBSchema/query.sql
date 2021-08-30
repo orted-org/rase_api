@@ -68,3 +68,62 @@ FROM teams, users
 WHERE creator_id = user_id) AS temp_tab1 NATURAL JOIN users
 WHERE creator_id != user_id
 GROUP BY team_id, team_name,creator_id,creator_name;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- joining team trigger
+DROP TRIGGER IF EXISTS limit_team_size ON user_teams;
+CREATE OR REPLACE function limit_team_size_func() returns trigger as '
+    DECLARE
+        user_count int;
+    BEGIN
+        SELECT count(*) from user_team into user_count WHERE team_id = new.team_id;
+        if user_count > 3
+            THEN RAISE EXCEPTION ''team is full'';
+        END IF;
+        RETURN new;
+    END;
+' language 'plpgsql';
+CREATE TRIGGER limit_team_size BEFORE
+INSERT ON user_teams FOR EACH ROW EXECUTE PROCEDURE limit_team_size_func();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- creating team trigger
+DROP TRIGGER IF EXISTS add_creator_on_team_creation ON teams;
+CREATE OR REPLACE function add_creator_to_user_teams() returns trigger as '
+DECLARE
+BEGIN
+    INSERT INTO user_teams (team_id, user_id) VALUES (new.team_id, new.creator_id);
+    RETURN new;
+END;
+' language 'plpgsql';
+CREATE TRIGGER add_creator_on_team_creation BEFORE
+INSERT ON teams FOR EACH ROW EXECUTE PROCEDURE add_creator_to_user_teams();
+
