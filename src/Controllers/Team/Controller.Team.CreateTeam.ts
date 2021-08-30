@@ -17,7 +17,7 @@ const CreateTeamPost: RouteHandler = (req, res, next) => {
     })
     .catch((err) => {
       // invalid input
-      next(new makeError.BadGateway(err.message));
+      next(new makeError.BadGateway(err));
     });
 };
 
