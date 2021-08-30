@@ -1,7 +1,7 @@
 import { professors } from "../../prof_year.json";
 import { makeError } from "../../Helpers/ErrorHandling/Helper.EH.MakeError";
-import { inMemDel, inMemGet, inMemSet } from "../../Helpers/InMemDB/Helper.IMD";
-import { OAuthPayload } from "../../Interfaces/Interfaces.Auth";
+import { inMemSet } from "../../Helpers/InMemDB/Helper.IMD";
+import { ISession, OAuthPayload } from "../../Interfaces/Interfaces.Auth";
 import {
   generateNewUserID,
   generateSessionID,
@@ -97,27 +97,4 @@ function gettingRoleOfUser(dataFromOAuth: OAuthPayload): UserRoleType {
   } else return "student";
 }
 
-function checkIfAlreadyLogin(incomingSession: string, userDao: UserDAO) {
-  return new Promise<IUser>(async (resolve, reject) => {
-    inMemGet(incomingSession).then((data) => {
-      if (data) {
-        return resolve(JSON.parse(data as string) as IUser);
-      } else {
-        return reject(new makeError.Unauthorized());
-      }
-    });
-  });
-}
-function performLogout(incomingSession: string, userDao: UserDAO) {
-  return new Promise((resolve, reject) => {
-    inMemDel(incomingSession)
-      .then((res) => {
-        return resolve(res);
-      })
-      .catch((err) => {
-        return reject(new makeError.InternalServerError());
-      });
-  });
-}
-
-export { performLogin, performLogout, checkIfAlreadyLogin };
+export { performLogin };

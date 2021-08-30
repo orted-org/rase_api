@@ -1,34 +1,23 @@
-import { makeError } from "../../Helpers/ErrorHandling/Helper.EH.MakeError";
 import RouteHandler from "../RouteHandlerType";
 import { UserDAO } from "../../DAO/DAO.User";
-import { performLogout } from "../../Services/Auth/Services.Auth";
+import { getSession } from "../../Helpers/Auth/Helper.Auth.SessionTransportation";
+import { SessionMAO } from "../../MAO/MAO.Session";
 
 const userDao = new UserDAO();
 const Logout: RouteHandler = (req, res, next) => {
   res.clearCookie("_LOC_ID");
-  if (req.cookies === undefined) {
-    // checking if there is no cookie
-    return next(new makeError.Unauthorized());
-  } else if (
-    // checking if there is no refresh token
-    req.cookies._LOC_ID === undefined ||
-    req.cookies._LOC_ID === "" ||
-    req.cookies._LOC_ID === null
-  ) {
-    return next(new makeError.Unauthorized());
-  }
+  const incomingSession = getSession(req);
 
-  // sending the incoming refresh token for logout
-  return performLogout(req.cookies._LOC_ID, userDao)
+  const sessionMao = new SessionMAO();
+  sessionMao
+    .DeleteSession(incomingSession)
     .then(() => {
-      //json because this request is made from internal js
       return res.status(200).json({
         status: 200,
         message: "Logged Out",
       });
     })
-    .catch((err: any) => {
-      //this will be internal server
+    .catch((err) => {
       next(err);
     });
 };
