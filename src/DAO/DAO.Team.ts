@@ -18,21 +18,21 @@ const _createTeam = `
                     (
                         ${TEAM_TABLE.attr.teamId},
                         ${TEAM_TABLE.attr.teamName},
-                        ${TEAM_TABLE.attr.description},
+                        ${TEAM_TABLE.attr.teamDescription},
                         ${TEAM_TABLE.attr.creatorId}
                     )
                     VALUES ($1, $2, $3, $4)
                     RETURNING 
                         ${TEAM_TABLE.attr.teamId},
                         ${TEAM_TABLE.attr.teamName},
-                        ${TEAM_TABLE.attr.description},
+                        ${TEAM_TABLE.attr.teamDescription},
                         ${TEAM_TABLE.attr.creatorId}
                     `;
 const _getTeamById = `
                     SELECT 
                         ${TEAM_TABLE.attr.teamId},
                         ${TEAM_TABLE.attr.teamName},
-                        ${TEAM_TABLE.attr.description},
+                        ${TEAM_TABLE.attr.teamDescription},
                         ${TEAM_TABLE.attr.creatorId}
                     FROM ${TEAM_TABLE.name} 
                     WHERE 
@@ -42,13 +42,13 @@ const _updateTeamById = `
                     UPDATE ${TEAM_TABLE.name}
                     SET
                         ${TEAM_TABLE.attr.teamName} = $1,
-                        ${TEAM_TABLE.attr.description} = $2
+                        ${TEAM_TABLE.attr.teamDescription} = $2
                     WHERE
                         ${TEAM_TABLE.attr.teamId} = $3
                     RETURNING 
                         ${TEAM_TABLE.attr.teamId},
                         ${TEAM_TABLE.attr.teamName},
-                        ${TEAM_TABLE.attr.description},
+                        ${TEAM_TABLE.attr.teamDescription},
                         ${TEAM_TABLE.attr.creatorId}
                     `;
 const _deleteTeamById = `
@@ -58,7 +58,7 @@ const _deleteTeamById = `
                     RETURNING 
                         ${TEAM_TABLE.attr.teamId},
                         ${TEAM_TABLE.attr.teamName},
-                        ${TEAM_TABLE.attr.description},
+                        ${TEAM_TABLE.attr.teamDescription},
                         ${TEAM_TABLE.attr.creatorId}
                     `
 class TeamDAO implements ITeamDAO {
@@ -68,7 +68,7 @@ class TeamDAO implements ITeamDAO {
                 const data = await client.query(_createTeam, [
                     teamData.teamId,
                     teamData.teamName,
-                    teamData.description,
+                    teamData.teamDescription,
                     teamData.creatorId
                 ]);
                 if (data.rows.length === 0) {
@@ -78,7 +78,7 @@ class TeamDAO implements ITeamDAO {
                 return resolve({
                     teamId : data.rows[0][TEAM_TABLE.attr.teamId],
                     teamName : data.rows[0][TEAM_TABLE.attr.teamName],
-                    description : data.rows[0][TEAM_TABLE.attr.description],
+                    teamDescription : data.rows[0][TEAM_TABLE.attr.teamDescription],
                     creatorId : data.rows[0][TEAM_TABLE.attr.creatorId]
                 });
             } catch (err) {
@@ -97,7 +97,7 @@ class TeamDAO implements ITeamDAO {
                 return resolve({
                     teamId : data.rows[0][TEAM_TABLE.attr.teamId],
                     teamName : data.rows[0][TEAM_TABLE.attr.teamName],
-                    description : data.rows[0][TEAM_TABLE.attr.description],
+                    teamDescription : data.rows[0][TEAM_TABLE.attr.teamDescription],
                     creatorId : data.rows[0][TEAM_TABLE.attr.creatorId]
                 });
             } catch (err) {
@@ -116,7 +116,7 @@ class TeamDAO implements ITeamDAO {
                 return resolve({
                     teamId : data.rows[0][TEAM_TABLE.attr.teamId],
                     teamName : data.rows[0][TEAM_TABLE.attr.teamName],
-                    description : data.rows[0][TEAM_TABLE.attr.description],
+                    teamDescription : data.rows[0][TEAM_TABLE.attr.teamDescription],
                     creatorId : data.rows[0][TEAM_TABLE.attr.creatorId]
                 });
             } catch (err) {
@@ -134,7 +134,7 @@ class TeamDAO implements ITeamDAO {
                 return resolve({
                     teamId : data.rows[0][TEAM_TABLE.attr.teamId],
                     teamName : data.rows[0][TEAM_TABLE.attr.teamName],
-                    description : data.rows[0][TEAM_TABLE.attr.description],
+                    teamDescription : data.rows[0][TEAM_TABLE.attr.teamDescription],
                     creatorId : data.rows[0][TEAM_TABLE.attr.creatorId]
                 });
             } catch (err) {

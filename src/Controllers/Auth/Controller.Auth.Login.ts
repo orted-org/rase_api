@@ -52,14 +52,13 @@ const LoginPost: RouteHandler = (req, res, next) => {
             .SetSession(data.sessionId, data.session)
             .then(() => {
               sendSession(res, data.sessionId);
+              // sending the response
+              res.status(200).json(data.session);
             })
             .catch((err) => {
               next(err);
               return;
             });
-
-          // sending the response
-          res.status(200).json(data.session);
         } catch (err) {
           //this will be internal server error
           throw err;

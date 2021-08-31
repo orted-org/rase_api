@@ -8,7 +8,7 @@ import { USER_TABLE, USER_TEAMS_TABLE } from "./DAO.DBInfo";
 interface ICreateUserParams extends IUser {}
 interface IUserDAO {
   CreateUser: (userData: ICreateUserParams) => Promise<IUser>;
-  GetUserBySubId: (subId: SubIdType) => Promise<IUser | null>;
+  // GetUserBySubId: (subId: SubIdType) => Promise<IUser | null>;
   GetUserWithTeamIdBySubId: (subId: SubIdType) => Promise<ISession | null>;
 }
 const _createUser = `
@@ -43,19 +43,22 @@ const _getUserBySubId = `
                             ${USER_TABLE.attr.subId} = $1
                         `;
 const _getUserWithTeamIdBySubId = `
-                                  SELECT 
-                                      ${USER_TABLE.name}.${USER_TABLE.attr.userId},
-                                      ${USER_TABLE.attr.subId},
-                                      ${USER_TABLE.attr.fullName},
-                                      ${USER_TABLE.attr.email},
-                                      ${USER_TABLE.attr.profilePicture},
-                                      ${USER_TABLE.attr.role}
-                                      ${USER_TEAMS_TABLE.attr.teamId}
-                                  FROM ${USER_TABLE.name}
-                                  LEFT JOIN ${USER_TEAMS_TABLE.name}
-                                  USING ${USER_TEAMS_TABLE.attr.userId} 
+                                  SELECT
+                                    ${USER_TABLE.name}.${USER_TABLE.attr.userId},
+                                    ${USER_TABLE.attr.fullName},                              
+                                    ${USER_TABLE.attr.profilePicture},                                
+                                    ${USER_TABLE.attr.subId},                         
+                                    ${USER_TABLE.attr.email},                                 
+                                    ${USER_TABLE.attr.role},                                 
+                                    ${USER_TEAMS_TABLE.attr.teamId}
+                                  FROM 
+                                    ${USER_TABLE.name}
+                                  LEFT JOIN 
+                                    ${USER_TEAMS_TABLE.name}
+                                  ON 
+                                    ${USER_TABLE.name}.${USER_TABLE.attr.userId} = ${USER_TEAMS_TABLE.name}.${USER_TEAMS_TABLE.attr.userId}
                                   WHERE 
-                                      ${USER_TABLE.attr.subId} = $1
+                                    ${USER_TABLE.attr.subId} = $1
                                   `;
 class UserDAO implements IUserDAO {
   CreateUser(userData: ICreateUserParams) {
@@ -88,36 +91,38 @@ class UserDAO implements IUserDAO {
         });
     });
   }
-  GetUserBySubId(subId: SubIdType) {
-    return new Promise<IUser | null>((resolve, reject) => {
-      client
-        .query(_getUserBySubId, [subId])
-        .then((data) => {
-          if (data.rows.length === 0) {
-            return resolve(null);
-          }
-          return resolve({
-            userId: data.rows[0][USER_TABLE.attr.userId],
-            subId: data.rows[0][USER_TABLE.attr.subId],
-            fullName: data.rows[0][USER_TABLE.attr.fullName],
-            email: data.rows[0][USER_TABLE.attr.email],
-            profilePicture: data.rows[0][USER_TABLE.attr.profilePicture],
-            role: data.rows[0][USER_TABLE.attr.role],
-          });
-        })
-        .catch((err) => {
-          return reject(DBError(err));
-        });
-    });
-  }
+  // GetUserBySubId(subId: SubIdType) {
+  //   return new Promise<IUser | null>((resolve, reject) => {
+  //     client
+  //       .query(_getUserBySubId, [subId])
+  //       .then((data) => {
+  //         if (data.rows.length === 0) {
+  //           return resolve(null);
+  //         }
+  //         return resolve({
+  //           userId: data.rows[0][USER_TABLE.attr.userId],
+  //           subId: data.rows[0][USER_TABLE.attr.subId],
+  //           fullName: data.rows[0][USER_TABLE.attr.fullName],
+  //           email: data.rows[0][USER_TABLE.attr.email],
+  //           profilePicture: data.rows[0][USER_TABLE.attr.profilePicture],
+  //           role: data.rows[0][USER_TABLE.attr.role],
+  //         });
+  //       })
+  //       .catch((err) => {
+  //         return reject(DBError(err));
+  //       });
+  //   });
+  // }
   GetUserWithTeamIdBySubId(subId: SubIdType) {
     return new Promise<ISession | null>((resolve, reject) => {
       client
-        .query(_getUserBySubId, [subId])
+        .query(_getUserWithTeamIdBySubId, [subId])
         .then((data) => {
           if (data.rows.length === 0) {
             return resolve(null);
           }
+          console.log(data);
+          
           return resolve({
             userId: data.rows[0][USER_TABLE.attr.userId],
             subId: data.rows[0][USER_TABLE.attr.subId],
