@@ -23,7 +23,7 @@ export const TEAM_TABLE = {
   attr: {
     teamId: "team_id",
     teamName: "team_name",
-    description: "description",
+    teamDescription: "description",
     creatorId: "creator_id",
   },
 };

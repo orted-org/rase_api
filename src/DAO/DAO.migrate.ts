@@ -23,7 +23,7 @@ const _createTeamTable = `CREATE TABLE IF NOT EXISTS ${TEAM_TABLE.name}
 (
     ${TEAM_TABLE.attr.teamId} UUID PRIMARY KEY,
     ${TEAM_TABLE.attr.teamName} TEXT NOT NULL,
-    ${TEAM_TABLE.attr.description} TEXT,
+    ${TEAM_TABLE.attr.teamDescription} TEXT,
     ${TEAM_TABLE.attr.creatorId} UUID UNIQUE NOT NULL,
     FOREIGN KEY(${TEAM_TABLE.attr.creatorId}) REFERENCES ${USER_TABLE.name}(${USER_TABLE.attr.userId}) ON DELETE CASCADE
 )`;
