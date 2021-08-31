@@ -7,23 +7,23 @@ import {
 import { OAuthPayload } from "../../Interfaces/Interfaces.Auth";
 import { makeError } from "../../Helpers/ErrorHandling/Helper.EH.MakeError";
 
-import {
-  checkIfAlreadyLogin,
-  performLogin,
-} from "../../Services/Auth/Services.Auth";
+import { performLogin } from "../../Services/Auth/Services.Auth";
 import { UserDAO } from "../../DAO/DAO.User";
 import { verifyGoogleIdTokenAndGetUserData } from "../../Helpers/Auth/Helper.Auth.GoogleAuthLib";
 import { ValidateUser } from "../../Services/Auth/Service.Auth.ValidateUser";
+import { SessionMAO } from "../../MAO/MAO.Session";
 const userDao = new UserDAO();
 
 // controller to perform login when received ID token from OAuth
 const LoginPost: RouteHandler = (req, res, next) => {
   //checking via session if already logged in
   const incomingSession = getSession(req);
-  checkIfAlreadyLogin(incomingSession, userDao)
-    .then((userData) => {
+  const sessionMao = new SessionMAO();
+  sessionMao
+    .GetSession(incomingSession)
+    .then((session) => {
       //already logged in
-      res.status(200).json(userData);
+      res.status(200).json(session);
     })
     .catch(async (err: any) => {
       //this means not logged in
@@ -47,12 +47,18 @@ const LoginPost: RouteHandler = (req, res, next) => {
           // Performing Login of the user and getting userData and session
           const data = await performLogin(tempData, userDao);
 
-          // if not wait listed sending the session
-          const session = data.session;
-          sendSession(res, session);
-
-          // sending the response
-          res.status(200).json(data.userData);
+          const sessionMao = new SessionMAO();
+          sessionMao
+            .SetSession(data.sessionId, data.session)
+            .then(() => {
+              sendSession(res, data.sessionId);
+              // sending the response
+              res.status(200).json(data.session);
+            })
+            .catch((err) => {
+              next(err);
+              return;
+            });
         } catch (err) {
           //this will be internal server error
           throw err;
@@ -64,10 +70,12 @@ const LoginPost: RouteHandler = (req, res, next) => {
 };
 const LoginGet: RouteHandler = (req, res, next) => {
   const incomingSession = getSession(req);
-  checkIfAlreadyLogin(incomingSession, userDao)
-    .then((userData) => {
+  const sessionMao = new SessionMAO();
+  sessionMao
+    .GetSession(incomingSession)
+    .then((session) => {
       //already logged in
-      res.status(200).json(userData);
+      res.status(200).json(session);
     })
     .catch((err) => {
       // not logged in

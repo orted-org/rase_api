@@ -1,7 +1,7 @@
 import { professors } from "../../prof_year.json";
 import { makeError } from "../../Helpers/ErrorHandling/Helper.EH.MakeError";
-import { inMemDel, inMemGet, inMemSet } from "../../Helpers/InMemDB/Helper.IMD";
-import { OAuthPayload } from "../../Interfaces/Interfaces.Auth";
+import { inMemSet } from "../../Helpers/InMemDB/Helper.IMD";
+import { ISession, OAuthPayload } from "../../Interfaces/Interfaces.Auth";
 import {
   generateNewUserID,
   generateSessionID,
@@ -12,29 +12,19 @@ import { IUser } from "../../Interfaces/Interface.User";
 import { UserRoleType } from "../../Types/Types.Global";
 
 interface UserDataWithSession {
-  userData: IUser;
-  session: string;
+  session: ISession;
+  sessionId: string;
 }
 
 function performLogin(dataFromOAuth: OAuthPayload, userDao: UserDAO) {
   return new Promise<UserDataWithSession>(async (resolve, reject) => {
     try {
-      const userData = await handleUserAccount(dataFromOAuth, userDao);
+      const session = await handleUserAccount(dataFromOAuth, userDao);
 
       // generating session for the user
-      const session = generateSessionID();
+      const sessionId = generateSessionID();
 
-      // storing the user in in memory db
-      inMemSet(session, JSON.stringify(userData), SESSION_DURATION.secFormat)
-        .then((res) => {
-          return resolve({
-            userData,
-            session,
-          });
-        })
-        .catch((err) => {
-          return reject(new makeError.InternalServerError());
-        });
+      return resolve({ session, sessionId });
     } catch (err) {
       return reject(err);
     }
@@ -42,16 +32,16 @@ function performLogin(dataFromOAuth: OAuthPayload, userDao: UserDAO) {
 }
 
 function handleUserAccount(dataFromOAuth: OAuthPayload, userDao: UserDAO) {
-  return new Promise<IUser>(async (resolve, reject) => {
+  return new Promise<ISession>(async (resolve, reject) => {
     // checking if the user with following subId exists in our DB
     try {
-      const user = await userDao.GetUserBySubId(dataFromOAuth.subId);
+      const user = await userDao.GetUserWithTeamIdBySubId(dataFromOAuth.subId);
       if (user === null) {
         // the user does not exists and we need to create user
         createNewUser(dataFromOAuth, userDao)
           .then((dataOfNewUser) => {
             //returning back the data of new user
-            return resolve(dataOfNewUser);
+            return resolve({ ...dataOfNewUser, teamId: null });
           })
           .catch((err) => {
             // internal server error or DB error
@@ -97,27 +87,4 @@ function gettingRoleOfUser(dataFromOAuth: OAuthPayload): UserRoleType {
   } else return "student";
 }
 
-function checkIfAlreadyLogin(incomingSession: string, userDao: UserDAO) {
-  return new Promise<IUser>(async (resolve, reject) => {
-    inMemGet(incomingSession).then((data) => {
-      if (data) {
-        return resolve(JSON.parse(data as string) as IUser);
-      } else {
-        return reject(new makeError.Unauthorized());
-      }
-    });
-  });
-}
-function performLogout(incomingSession: string, userDao: UserDAO) {
-  return new Promise((resolve, reject) => {
-    inMemDel(incomingSession)
-      .then((res) => {
-        return resolve(res);
-      })
-      .catch((err) => {
-        return reject(new makeError.InternalServerError());
-      });
-  });
-}
-
-export { performLogin, performLogout, checkIfAlreadyLogin };
+export { performLogin };

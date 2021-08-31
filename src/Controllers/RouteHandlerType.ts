@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { IUser } from "../Interfaces/Interface.User";
+import { ISession } from "../Interfaces/Interfaces.Auth";
 
 interface IncomingRequest extends Request {
-  userData: IUser;
+  userData: ISession;
   sessionID: string;
 }
 type RouteHandler = (
