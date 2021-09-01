@@ -47,4 +47,7 @@ function SaveFile(fileName: string, req: Request, res: Response) {
     });
   });
 }
+function GetFile(fileRef: string){
+    
+}
 export default SaveFile;

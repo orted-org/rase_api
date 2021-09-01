@@ -46,7 +46,7 @@ async function ValidateJoinTeam(teamId: string) {
         UnitValidator.ValidateUndefined,
         UnitValidator.ValidateIsNotNull,
         UnitValidator.ValidateZeroLength,
-        UnitValidator.validateIsUUID,
+        UnitValidator.ValidateIsUUID,
       ],
       teamId,
       "team id"

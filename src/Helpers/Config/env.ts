@@ -34,7 +34,7 @@ const ENV = {
     postgresPassword: getEnv("POSTGRES_PASSWORD")?.getString() || "postgres",
   },
   fileHandling: {
-    relPath: "/task-files",
+    relPath: "task-files",
   },
 };
 
