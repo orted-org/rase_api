@@ -20,5 +20,11 @@ const checkAllowance: RouteHandler = (req, res, next) => {
       next(err);
     });
 };
-
-export { checkAllowance };
+const checkTeacher: RouteHandler = (req, res, next) => {
+  if (req.userData.role === "student") {
+    next(new makeError.Unauthorized("route only accessible to teacher"));
+  } else {
+    next();
+  }
+};
+export { checkAllowance, checkTeacher };
