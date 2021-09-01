@@ -1,5 +1,6 @@
 import { generateNewUUID } from "../../Helpers/Auth/Helper.Auth.Factory";
 import { makeError } from "../../Helpers/ErrorHandling/Helper.EH.MakeError";
+import SaveFile from "../../Helpers/FileHandling/Helper.FileHandler";
 import {
   UnitValidator,
   ValidationPipeline,
@@ -21,9 +22,14 @@ const CreateTaskPost: RouteHandler = (req, res, next) => {
     taskSubmissionType
   )
     .then(async () => {
-      const taskAttachmentRef = null;
+      let taskAttachmentRef: string | null = null;
       if (taskSubmissionType === "file") {
         // do file saving here
+
+        // this will return the file name with extension
+        // if task id = 1a2b3c, and file is a pdf, it will return
+        // 1a2b3c.pdf, without any path
+        taskAttachmentRef = await SaveFile(taskId, req, res);
       }
     })
     .catch((err) => {

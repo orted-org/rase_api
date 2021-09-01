@@ -33,6 +33,9 @@ const ENV = {
     postgresDB: getEnv("POSTGRES_DB")?.getString() || "postgres",
     postgresPassword: getEnv("POSTGRES_PASSWORD")?.getString() || "postgres",
   },
+  fileHandling: {
+    relPath: "/task-files",
+  },
 };
 
 function getEnv(key: string): EnvData | undefined {

@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
 import multer from "multer";
 import path from "path";
+import ENV from "../Config/env";
 import { makeError } from "../ErrorHandling/Helper.EH.MakeError";
 
 function SaveFile(fileName: string, req: Request, res: Response) {
   return new Promise<string>((resolve, reject) => {
     const upload = multer({
       storage: multer.diskStorage({
-        destination: "",
+        destination: ENV.fileHandling.relPath,
         filename: (req, file, cb) => {
           cb(null, fileName + path.extname(file.originalname));
         },
