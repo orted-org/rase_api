@@ -15,21 +15,21 @@ const JoinTeamPost: RouteHandler = (req, res, next) => {
   ValidateJoinTeam(teamId)
     .then(async () => {
       try {
-            //validated input
-            const userTeamData : IUserTeam = await joinTeam({
-              userId : userId,
-              teamId : teamId
-            })
-            req.userData.teamId = userTeamData.teamId;
-            //changing data in MAO
-            await new SessionMAO().SetSession(req.sessionID, req.userData);
+        //validated input
+        const userTeamData: IUserTeam = await joinTeam({
+          userId: userId,
+          teamId: teamId,
+        });
+        req.userData.teamId = userTeamData.teamId;
+        //changing data in MAO
+        await new SessionMAO().SetSession(req.sessionID, req.userData);
 
-            sendSession(res, req.sessionID);
+        sendSession(res, req.sessionID);
 
-            res.status(201).json({
-              status :201, 
-              message : "Team Joined successfully"
-            })
+        res.status(201).json({
+          status: 201,
+          message: "Team Joined successfully",
+        });
       } catch (err) {
         next(err);
       }
@@ -47,7 +47,7 @@ async function ValidateJoinTeam(teamId: string) {
         UnitValidator.ValidateUndefined,
         UnitValidator.ValidateIsNotNull,
         UnitValidator.ValidateZeroLength,
-        UnitValidator.validateIsUUID
+        UnitValidator.ValidateIsUUID,
       ],
       teamId,
       "team id"
