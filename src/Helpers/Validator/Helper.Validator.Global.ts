@@ -4,7 +4,8 @@ const UnitValidator = {
   ValidateIsNumber: validateIsNumber,
   ValidateIsNotNull: validateIsNotNull,
   ValidateIsNotNaN: validateIsNotNaN,
-  validateIsUUID: validateIsUUID,
+  ValidateIsUUID: validateIsUUID,
+  ValidateIsFutureDate: validateIsValidFutureDate,
 };
 function validateUndefined(item: any): boolean {
   return item !== undefined;
@@ -28,6 +29,18 @@ function validateIsUUID(item: any): boolean {
 
   return regexExp.test(item);
 }
+function validateIsValidFutureDate(item: any): boolean {
+  const incomingDate = new Date(item);
+  if (!(incomingDate.getDate() && incomingDate.getMinutes())) {
+    return false;
+  }
+  const currentDate = new Date();
+  if ((incomingDate as any) - (currentDate as any) < 5) {
+    return false;
+  }
+  return true;
+}
+
 function ValidationPipeline(
   validators: ((item: any) => boolean)[],
   item: any,
