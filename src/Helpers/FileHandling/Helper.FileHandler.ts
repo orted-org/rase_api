@@ -47,7 +47,7 @@ function SaveFile(fileName: string, req: Request, res: Response) {
     });
   });
 }
-function GetFile(fileRef: string){
-    
+function GetFile(fileRef: string): string {
+  return path.join(ENV.fileHandling.relPath, fileRef);
 }
-export default SaveFile;
+export { SaveFile, GetFile };

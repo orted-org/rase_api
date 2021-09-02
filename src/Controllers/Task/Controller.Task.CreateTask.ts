@@ -1,6 +1,6 @@
 import { generateNewUUID } from "../../Helpers/Auth/Helper.Auth.Factory";
 import { makeError } from "../../Helpers/ErrorHandling/Helper.EH.MakeError";
-import SaveFile from "../../Helpers/FileHandling/Helper.FileHandler";
+import { SaveFile } from "../../Helpers/FileHandling/Helper.FileHandler";
 import {
   UnitValidator,
   ValidationPipeline,
