@@ -4,7 +4,7 @@ import {
   ValidationPipeline,
 } from "../../Helpers/Validator/Helper.Validator.Global";
 import RouteHandler from "../RouteHandlerType";
-const CreateTaskPost: RouteHandler = (req, res, next) => {
+const GetFileGet: RouteHandler = (req, res, next) => {
   // required data to create a task
   const isTask = req.query.type == "task";
   const incomingId = req.query.id as string;
@@ -12,7 +12,6 @@ const CreateTaskPost: RouteHandler = (req, res, next) => {
   ValidateGetFile(incomingId)
     .then(async () => {
       //check from db if the user is allowed to have the file
-
     })
     .catch((err) => {
       // invalid request
@@ -38,4 +37,4 @@ async function ValidateGetFile(incomingId: string) {
     throw err;
   }
 }
-export { ValidateGetFile, CreateTaskPost };
+export { ValidateGetFile, GetFileGet };
