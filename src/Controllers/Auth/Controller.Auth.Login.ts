@@ -17,10 +17,10 @@ const userDao = new UserDAO();
 // controller to perform login when received ID token from OAuth
 const LoginPost: RouteHandler = (req, res, next) => {
   //checking via session if already logged in
-  const incomingSession = getSession(req);
+  const incomingSessionId = getSession(req);
   const sessionMao = new SessionMAO();
   sessionMao
-    .GetSession(incomingSession)
+    .GetSession(incomingSessionId)
     .then((session) => {
       //already logged in
       res.status(200).json(session);

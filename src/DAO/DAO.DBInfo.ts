@@ -35,3 +35,24 @@ export const USER_TEAMS_TABLE = {
     teamId: "team_id",
   },
 };
+
+export const ATTACHMENT_TYPE = {
+  name : "attachment_type",
+  enum : {
+    text : "text",
+    path : "path",
+    link : "link"
+  }
+}
+
+export const TASK_TABLE = {
+  name : "tasks",
+  attr : {
+    taskId : "task_id",
+    taskTitle : "title",
+    taskDescription : "description",
+    taskDeadline : "deadline",
+    taskAttachment : "attachment",
+    taskSubmissionType : "submission_type"
+  }
+}

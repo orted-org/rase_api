@@ -1,4 +1,5 @@
 type UUIDType = string;
 type SubIdType = string;
 type UserRoleType = "student" | "teacher";
-export { UUIDType, SubIdType, UserRoleType };
+type AttachmentType = "text"  | "path" | "link";
+export { UUIDType, SubIdType, UserRoleType, AttachmentType};

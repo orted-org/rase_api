@@ -4,7 +4,7 @@ import { ITeam } from "../../Interfaces/Interface.Team";
 import { IUserTeam } from "../../Interfaces/Interface.UserTeam";
 
 /*
-createting the team
+creating the team
 changing session data in cache
 changing session in res.cookie
 */

@@ -56,6 +56,7 @@ function handleUserAccount(dataFromOAuth: OAuthPayload, userDao: UserDAO) {
     }
   });
 }
+
 function createNewUser(dataFromOAuth: OAuthPayload, userDao: UserDAO) {
   return new Promise<IUser>((resolve, reject) => {
     //creating user object with the data from OAuth

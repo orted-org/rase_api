@@ -5,6 +5,7 @@ interface IncomingRequest extends Request {
   userData: ISession;
   sessionID: string;
 }
+
 type RouteHandler = (
   req: IncomingRequest,
   res: Response,
