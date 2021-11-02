@@ -4,6 +4,7 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import ENV from "../Helpers/Config/env";
+import path from "path/posix";
 const cors = require("cors") as any;
 function ConfigureServer(): Application {
   const app = express();
@@ -17,6 +18,10 @@ function ConfigureServer(): Application {
 
   // cors for react front end
   app.use(cors({ credentials: true, origin: ENV.connectivity.reactUri }));
+
+  // setting static for string attachments and submissions
+  app.use(express.static(path.join(__dirname, '/../../files/attachments')));
+  app.use(express.static(path.join(__dirname, '/../../files/submissions')));
 
   // hiding server details
   app.use((req, res, next) => {

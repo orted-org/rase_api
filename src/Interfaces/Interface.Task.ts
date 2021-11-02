@@ -5,7 +5,7 @@ interface ITask {
     taskTitle : string,
     taskDescription : string,
     taskDeadline : Date,
-    taskAttachment : AttachmentType,
-    taskSubmissionType : string
+    taskAttachment : string,
+    taskAttachmentType : AttachmentType
 }
 export { ITask }

@@ -53,6 +53,6 @@ export const TASK_TABLE = {
     taskDescription : "description",
     taskDeadline : "deadline",
     taskAttachment : "attachment",
-    taskSubmissionType : "submission_type"
+    taskAttachmentType : "attachment_type"
   }
 }

@@ -14,7 +14,7 @@ const _createTask = `
                         ${TASK_TABLE.attr.taskDescription},
                         ${TASK_TABLE.attr.taskDeadline},
                         ${TASK_TABLE.attr.taskAttachment}
-                        ${TASK_TABLE.attr.taskSubmissionType}
+                        ${TASK_TABLE.attr.taskAttachmentType}
                     )
                     VALUES ($1, $2, $3, $4, $5, $6)
                     RETURNING 
@@ -23,7 +23,7 @@ const _createTask = `
                         ${TASK_TABLE.attr.taskDescription},
                         ${TASK_TABLE.attr.taskDeadline},
                         ${TASK_TABLE.attr.taskAttachment}
-                        ${TASK_TABLE.attr.taskSubmissionType}
+                        ${TASK_TABLE.attr.taskAttachmentType}
                     `;
 
 const _updateTaskById = `
@@ -33,7 +33,7 @@ const _updateTaskById = `
                         ${TASK_TABLE.attr.taskDescription} = $2,
                         ${TASK_TABLE.attr.taskDeadline} = $3,
                         ${TASK_TABLE.attr.taskAttachment} = $4,
-                        ${TASK_TABLE.attr.taskSubmissionType} = $5
+                        ${TASK_TABLE.attr.taskAttachmentType} = $5
                     WHERE
                         ${TASK_TABLE.attr.taskId} = $6
                     RETURNING 
@@ -42,7 +42,7 @@ const _updateTaskById = `
                         ${TASK_TABLE.attr.taskDescription},
                         ${TASK_TABLE.attr.taskDeadline},
                         ${TASK_TABLE.attr.taskAttachment}
-                        ${TASK_TABLE.attr.taskSubmissionType}
+                        ${TASK_TABLE.attr.taskAttachmentType}
                     `;
 
 
@@ -57,7 +57,7 @@ const _deleteTaskById = `
                             ${TASK_TABLE.attr.taskDescription},
                             ${TASK_TABLE.attr.taskDeadline},
                             ${TASK_TABLE.attr.taskAttachment}
-                            ${TASK_TABLE.attr.taskSubmissionType}
+                            ${TASK_TABLE.attr.taskAttachmentType}
 `;
 
 const _getAllTasks = `
@@ -70,7 +70,7 @@ const _getAllTasks = `
                             ${TASK_TABLE.attr.taskDescription},
                             ${TASK_TABLE.attr.taskDeadline},
                             ${TASK_TABLE.attr.taskAttachment}
-                            ${TASK_TABLE.attr.taskSubmissionType}     
+                            ${TASK_TABLE.attr.taskAttachmentType}     
 `;
 
 const _getTaskById = `
@@ -85,7 +85,7 @@ const _getTaskById = `
                         ${TASK_TABLE.attr.taskDescription},
                         ${TASK_TABLE.attr.taskDeadline},
                         ${TASK_TABLE.attr.taskAttachment}
-                        ${TASK_TABLE.attr.taskSubmissionType}
+                        ${TASK_TABLE.attr.taskAttachmentType}
 `;
 
 
@@ -107,7 +107,7 @@ class TaskDAO implements ITaskDAO {
                     taskData.taskDescription,
                     taskData.taskDeadline,
                     taskData.taskAttachment,
-                    taskData.taskSubmissionType
+                    taskData.taskAttachmentType
                 ]);
                 resolve(taskData);
             } catch (err) {
@@ -129,7 +129,7 @@ class TaskDAO implements ITaskDAO {
                         taskDescription: row.taskDescription,
                         taskDeadline: row.taskDeadline,
                         taskAttachment: row.taskAttachment,
-                        taskSubmissionType: row.taskSubmissionType
+                        taskAttachmentType: row.taskAttachmentType
                     });
                 })
                 return resolve(returnData);
@@ -139,19 +139,23 @@ class TaskDAO implements ITaskDAO {
         })
     }
 
-    GetTaskById(teamId: UUIDType) {
+    GetTaskById(taskId: UUIDType) {
         return new Promise<ITask | null>(async (resolve, reject) => {
-            const data = await client.query(_getTaskById, [
-                teamId
-            ]);
-            return resolve({
-                taskId: data.rows[0][TASK_TABLE.attr.taskId],
-                taskTitle: data.rows[0][TASK_TABLE.attr.taskTitle],
-                taskDescription: data.rows[0][TASK_TABLE.attr.taskDescription],
-                taskDeadline: data.rows[0][TASK_TABLE.attr.taskDeadline],
-                taskAttachment: data.rows[0][TASK_TABLE.attr.taskAttachment],
-                taskSubmissionType: data.rows[0][TASK_TABLE.attr.taskSubmissionType]
-            })
+            try {
+                const data = await client.query(_getTaskById, [
+                    taskId
+                ]);
+                return resolve({
+                    taskId: data.rows[0][TASK_TABLE.attr.taskId],
+                    taskTitle: data.rows[0][TASK_TABLE.attr.taskTitle],
+                    taskDescription: data.rows[0][TASK_TABLE.attr.taskDescription],
+                    taskDeadline: data.rows[0][TASK_TABLE.attr.taskDeadline],
+                    taskAttachment: data.rows[0][TASK_TABLE.attr.taskAttachment],
+                    taskAttachmentType: data.rows[0][TASK_TABLE.attr.taskAttachmentType]
+                })
+            } catch(err) {
+                reject(err);
+            }
         })
     }
 
@@ -163,7 +167,7 @@ class TaskDAO implements ITaskDAO {
                     newTaskData.taskDescription,
                     newTaskData.taskDeadline,
                     newTaskData.taskAttachment,
-                    newTaskData.taskSubmissionType,
+                    newTaskData.taskAttachmentType,
                     newTaskData.taskId
                 ])
                 return resolve(null);
